@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes dropIn {
+    0% {
+      transform: scale(0.8) translateY(-20px);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .animate-drop-in {
+    animation: dropIn 0.3s ease-out;
+  }
+  
+  /* Global font */
+body {
+  font-family: 'Poppins', sans-serif;
+}

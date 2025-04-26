@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom"; // ✨ Added
 import PageTemplate from "./components/PageTemplate";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "./firebase";
@@ -16,15 +17,19 @@ const HomePage = ({ user, preferences, chatLogs }) => {
     if (user) {
       try {
         const userRef = doc(db, "users", user.uid);
-        await setDoc(userRef, {
-          preferences: {
-            ...preferences,
-            dailyCheckin: {
-              enabled: true,
-              time: dailyTime,
+        await setDoc(
+          userRef,
+          {
+            preferences: {
+              ...preferences,
+              dailyCheckin: {
+                enabled: true,
+                time: dailyTime,
+              },
             },
           },
-        }, { merge: true });
+          { merge: true }
+        );
         alert("Daily check-in time saved!");
       } catch (err) {
         console.error("Failed to save check-in time:", err);
@@ -36,9 +41,16 @@ const HomePage = ({ user, preferences, chatLogs }) => {
   return (
     <div className="px-4 py-10 space-y-8">
       <div className="text-center">
-        <h1 className="text-3xl font-bold text-blue-700 dark:text-blue-300">Welcome to Agewell 👋</h1>
+        <h1 className="text-3xl font-bold text-blue-700 dark:text-blue-300">
+          Welcome to Agewell 👋
+        </h1>
       </div>
-      <PageTemplate title="Daily Check-in" placeholder="How are you feeling today?" user={user} />
+
+      <PageTemplate
+        title="Daily Check-in"
+        placeholder="How are you feeling today?"
+        user={user}
+      />
 
       <div className="bg-green-100 dark:bg-green-700 text-green-900 dark:text-green-100 text-lg p-4 px-6 rounded-xl border border-green-200 dark:border-green-600 shadow max-w-xl mx-auto text-center">
         ✅ You’ve checked in today. Your family has been notified 😊
@@ -68,13 +80,24 @@ const HomePage = ({ user, preferences, chatLogs }) => {
           <ul className="space-y-2 text-left">
             {chatLogs.map((log, index) => (
               <li key={index} className="bg-gray-100 dark:bg-gray-700 p-3 rounded-xl">
-                <strong>You:</strong> {log.question}<br />
+                <strong>You:</strong> {log.question}
+                <br />
                 <strong>AI:</strong> {log.answer}
               </li>
             ))}
           </ul>
         </div>
       )}
+
+      {/* ✨ New Tic Tac Toe button at the bottom */}
+      <div className="flex justify-center mt-10">
+        <Link
+          to="/games/tictactoe"
+          className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition"
+        >
+          🎮 Play Tic Tac Toe
+        </Link>
+      </div>
     </div>
   );
 };
