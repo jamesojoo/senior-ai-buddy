@@ -78,56 +78,56 @@ export default function App() {
       <Router>
         <div className="min-h-screen bg-white dark:bg-gray-900 font-sans transition-colors">
 
-          {/* Header with logo */}
-          <header className="bg-blue-600 text-white px-6 py-4 shadow-md flex justify-between items-center">
-            <div className="flex items-center gap-3">
+          <header className="bg-blue-600 text-white px-6 py-4 shadow-md">
+            <div className="flex flex-col items-center justify-center space-y-4 sm:space-y-6">
+              {/* Logo */}
               <img
                 src="/assets/AgewellLogo.png"
                 alt="Agewell Logo"
-                className="h-10 w-auto"
+                className="h-16 w-auto rounded-xl shadow-md"
               />
-              <span className="text-3xl font-extrabold tracking-tight bg-white text-blue-600 px-3 py-1 rounded-xl shadow-lg">
-                Agewell
-              </span>
-            </div>
 
-            <nav className="space-x-4 flex items-center">
-              <Link to="/" className="flex items-center gap-2 hover:bg-blue-500 px-3 py-1 rounded-lg transition"><FaHome /> Home</Link>
-              <Link to="/games" className="flex items-center gap-2 hover:bg-blue-500 px-3 py-1 rounded-lg transition"><FaGamepad /> Games</Link>
-              <Link to="/support" className="flex items-center gap-2 hover:bg-blue-500 px-3 py-1 rounded-lg transition"><FaLifeRing /> Support</Link>
-              <Link to="/news" className="flex items-center gap-2 hover:bg-blue-500 px-3 py-1 rounded-lg transition"><FaNewspaper /> News</Link>
-              {!user ? (
-                <>
-                  <Link to="/login" className="flex items-center gap-2 hover:bg-blue-500 px-3 py-1 rounded-lg transition"><FaUser /> Login</Link>
-                  <Link to="/signup" className="flex items-center gap-2 hover:bg-blue-500 px-3 py-1 rounded-lg transition"><FaUserPlus /> Sign Up</Link>
-                </>
-              ) : (
-                <>
-                  <span className="text-sm text-white px-3">{user.email}</span>
-                  <button onClick={handleLogout} className="flex items-center gap-2 bg-white text-blue-600 px-3 py-1 rounded-lg hover:bg-gray-100 transition"><FaSignOutAlt /> Logout</button>
-                </>
-              )}
-              <button
-                onClick={async () => {
-                  const newTheme = !darkMode ? "dark" : "light";
-                  setDarkMode(!darkMode);
-                  localStorage.setItem("theme", newTheme);
-                  if (user) {
-                    try {
-                      const userRef = doc(db, "users", user.uid);
-                      await setDoc(userRef, {
-                        preferences: { theme: newTheme }
-                      }, { merge: true });
-                    } catch (error) {
-                      console.error("Failed to save theme preference:", error);
+              {/* Nav Links */}
+              <nav className="flex flex-wrap justify-center items-center gap-4">
+                <Link to="/" className="flex items-center gap-2 hover:bg-blue-500 px-3 py-1 rounded-lg transition"><FaHome /> Home</Link>
+                <Link to="/games" className="flex items-center gap-2 hover:bg-blue-500 px-3 py-1 rounded-lg transition"><FaGamepad /> Games</Link>
+                <Link to="/support" className="flex items-center gap-2 hover:bg-blue-500 px-3 py-1 rounded-lg transition"><FaLifeRing /> Support</Link>
+                <Link to="/news" className="flex items-center gap-2 hover:bg-blue-500 px-3 py-1 rounded-lg transition"><FaNewspaper /> News</Link>
+
+                {!user ? (
+                  <>
+                    <Link to="/login" className="flex items-center gap-2 hover:bg-blue-500 px-3 py-1 rounded-lg transition"><FaUser /> Login</Link>
+                    <Link to="/signup" className="flex items-center gap-2 hover:bg-blue-500 px-3 py-1 rounded-lg transition"><FaUserPlus /> Sign Up</Link>
+                  </>
+                ) : (
+                  <>
+                    <span className="text-sm text-white px-3">{user.email}</span>
+                    <button onClick={handleLogout} className="flex items-center gap-2 bg-white text-blue-600 px-3 py-1 rounded-lg hover:bg-gray-100 transition"><FaSignOutAlt /> Logout</button>
+                  </>
+                )}
+
+                <button
+                  onClick={async () => {
+                    const newTheme = !darkMode ? "dark" : "light";
+                    setDarkMode(!darkMode);
+                    localStorage.setItem("theme", newTheme);
+                    if (user) {
+                      try {
+                        const userRef = doc(db, "users", user.uid);
+                        await setDoc(userRef, {
+                          preferences: { theme: newTheme }
+                        }, { merge: true });
+                      } catch (error) {
+                        console.error("Failed to save theme preference:", error);
+                      }
                     }
-                  }
-                }}
-                className="ml-4 bg-white dark:bg-gray-800 text-blue-600 dark:text-white px-3 py-1 rounded-full shadow transition"
-              >
-                {darkMode ? "\u2600\ufe0f Light" : "\ud83c\udf19 Dark"}
-              </button>
-            </nav>
+                  }}
+                  className="bg-white dark:bg-gray-800 text-blue-600 dark:text-white px-3 py-1 rounded-full shadow transition"
+                >
+                  {darkMode ? "☀️ Light" : "🌙 Dark"}
+                </button>
+              </nav>
+            </div>
           </header>
 
           {/* Main App Routes */}

@@ -1,6 +1,6 @@
 # Agewell App 🌟
 
-**Agewell** is a modern web application designed to help users live better, age better.  
+**Agewell** is a modern web application designed to help users (typically older users) live better, age better.  
 It provides games for mental sharpness, support resources, news updates, and personalized features like theme preferences and chat logs.
 
 ---
