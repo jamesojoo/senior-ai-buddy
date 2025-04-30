@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom"; // ✨ Added
+import { Link } from "react-router-dom";
 import PageTemplate from "./components/PageTemplate";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "./firebase";
@@ -13,30 +13,31 @@ const HomePage = ({ user, preferences, chatLogs }) => {
     }
   }, [preferences]);
 
-  const saveDailyCheckinTime = async () => {
-    if (user) {
-      try {
-        const userRef = doc(db, "users", user.uid);
-        await setDoc(
-          userRef,
-          {
-            preferences: {
-              ...preferences,
-              dailyCheckin: {
-                enabled: true,
-                time: dailyTime,
+  useEffect(() => {
+    if (user && preferences) {
+      const saveTime = async () => {
+        try {
+          const userRef = doc(db, "users", user.uid);
+          await setDoc(
+            userRef,
+            {
+              preferences: {
+                ...preferences,
+                dailyCheckin: {
+                  enabled: true,
+                  time: dailyTime,
+                },
               },
             },
-          },
-          { merge: true }
-        );
-        alert("Daily check-in time saved!");
-      } catch (err) {
-        console.error("Failed to save check-in time:", err);
-        alert("Something went wrong.");
-      }
+            { merge: true }
+          );
+        } catch (err) {
+          console.error("Failed to auto-save check-in time:", err);
+        }
+      };
+      saveTime();
     }
-  };
+  }, [dailyTime]);
 
   return (
     <div className="px-4 py-10 space-y-8">
@@ -66,7 +67,7 @@ const HomePage = ({ user, preferences, chatLogs }) => {
             className="p-2 rounded-lg border dark:bg-gray-700 dark:text-white"
           />
           <button
-            onClick={saveDailyCheckinTime}
+            onClick={() => alert("Check-in time saved manually (auto-saving enabled too).")}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
           >
             Save Time
@@ -89,7 +90,6 @@ const HomePage = ({ user, preferences, chatLogs }) => {
         </div>
       )}
 
-      {/* ✨ New Tic Tac Toe button at the bottom */}
       <div className="flex justify-center mt-10">
         <Link
           to="/games/tictactoe"
